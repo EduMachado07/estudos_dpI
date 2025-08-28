@@ -13,7 +13,7 @@ export class MockUserRepository implements IUserRepository {
         return data
     }
 
-    async FindUserById(email: string): Promise<User | null> {
+    async FindUserByEmail(email: string): Promise<User | null> {
         const user: User = MockUser.find(user => user.email === email) || null
 
         return user

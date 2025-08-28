@@ -11,7 +11,7 @@ export class RegisterUserUseCase {
     ) { }
 
     async execute(data: IRegisterUserDTO) {
-        const userAlreadyExists = await this.userRepository.FindUserById(data.email)
+        const userAlreadyExists = await this.userRepository.FindUserByEmail(data.email)
         if (userAlreadyExists) {
             throw new Conflict('Ops! Usuário já cadastrado no nosso sistema');
         }
