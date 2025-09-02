@@ -35,6 +35,7 @@ model Study {
   description String   @db.VarChar(250)
   thumbnail   String
   body        Json
+  slug
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 

@@ -1,6 +1,6 @@
+import 'dotenv/config';
 import express from 'express'
 import { router } from './routes';
-import 'dotenv/config';
 import { ErrorProcessing } from './repositories/implementations/ErrorRepository';
 
 const app = express()

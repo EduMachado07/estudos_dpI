@@ -26,6 +26,8 @@ export class LoginUserController {
         sameSite: "strict",
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 dias
       });
+
+      return res.status(200).json({ message: 'Usuário entrou no sistema.' });
     } catch (err) {
       if (err instanceof z.ZodError) {
         const zodValidationError = new ZodValidationError(err);

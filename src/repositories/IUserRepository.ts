@@ -6,4 +6,5 @@ export interface IUserRepository {
     Register(data: User): Promise<User>;
     // FindUserById(email: string): Promise<User | null>;
     FindUserByEmail(email: string): Promise<User | null>;
+    FindUserById(id: string): Promise<User | null>;
 }
