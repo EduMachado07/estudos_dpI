@@ -1,3 +1,4 @@
+import { UploadImage } from "../../../providers/implementations/UploadImage";
 import { NotFound } from "../../../repositories/IErrorRepository";
 import { MockStudyRepository } from "../../../repositories/implementations/MockStudyRepository";
 import { MockUserRepository } from "../../../repositories/implementations/MockUserRepository";
@@ -6,7 +7,8 @@ import { ICreateStudyDTO } from "./CreateStudy_DTO";
 export class CreateStudyUseCase {
   constructor(
     private studyRepository: MockStudyRepository,
-    private userRepository: MockUserRepository
+    private userRepository: MockUserRepository,
+    private uploadImage: UploadImage
   ) {}
 
   async execute(data: ICreateStudyDTO) {
@@ -17,6 +19,7 @@ export class CreateStudyUseCase {
     }
 
     // tratar thumbnail
+    await this.uploadImage.execute()
 
     // tratar body
 

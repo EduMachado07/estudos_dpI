@@ -9,4 +9,12 @@ export class MockStudyRepository implements IStudyRepository {
 
         return data
     }
+
+    async findStudies({ limit, offset }: any): Promise<Study[]> {
+        
+    }
+
+    async findStudyById(id: string): Promise<Study> {
+        
+    }
 }
