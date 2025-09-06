@@ -1,9 +1,8 @@
-import { StorageService } from "../../../providers/CloudinaryConfig";
-import { UploadImage } from "../../../providers/implementations/UploadImage";
 import { MockStudyRepository } from "../../../repositories/implementations/MockStudyRepository";
 import { MockUserRepository } from "../../../repositories/implementations/MockUserRepository";
 import { CreateStudyController } from "./CreateStudy_Controller";
 import { CreateStudyUseCase } from "./CreateStudy_UseCase";
+import { UploadThumbnail } from "../../../providers/implementations/CloudinaryUploadImageProvider";
 
 // Configura e injeta dependências para o módulo.
 // Facilita testes e mantém a arquitetura limpa.
@@ -11,12 +10,10 @@ import { CreateStudyUseCase } from "./CreateStudy_UseCase";
 // Instancia Repositories
 const userRepository = new MockUserRepository();
 const studyRepository = new MockStudyRepository();
-
-const storageService = new StorageService()
-const uploadImage = new UploadImage(storageService)
+const uploadThumbnail = new UploadThumbnail()
 
 // Instancia Use Case
-const createStudyUseCase = new CreateStudyUseCase(studyRepository, userRepository, uploadImage);
+const createStudyUseCase = new CreateStudyUseCase(studyRepository, userRepository, uploadThumbnail);
 // Instancia Controller
 const createStudyController = new CreateStudyController(createStudyUseCase);
 

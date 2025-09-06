@@ -1,4 +1,4 @@
-import { UploadImage } from "../../../providers/implementations/UploadImage";
+import { UploadThumbnail } from "../../../providers/implementations/CloudinaryUploadImageProvider";
 import { NotFound } from "../../../repositories/IErrorRepository";
 import { MockStudyRepository } from "../../../repositories/implementations/MockStudyRepository";
 import { MockUserRepository } from "../../../repositories/implementations/MockUserRepository";
@@ -8,7 +8,7 @@ export class CreateStudyUseCase {
   constructor(
     private studyRepository: MockStudyRepository,
     private userRepository: MockUserRepository,
-    private uploadImage: UploadImage
+    private uploadThumbnail: UploadThumbnail
   ) {}
 
   async execute(data: ICreateStudyDTO) {
@@ -19,11 +19,15 @@ export class CreateStudyUseCase {
     }
 
     // tratar thumbnail
-    await this.uploadImage.execute()
+    const thumbnailUrl = await this.uploadThumbnail.cloudinary(data.thumbnail)
 
     // tratar body
+    
 
-    const newStudy = await this.studyRepository.create(data) 
+    const newStudy = await this.studyRepository.create({
+      ...data,
+      thumbnail: thumbnailUrl
+    }) 
 
     return newStudy
   }
