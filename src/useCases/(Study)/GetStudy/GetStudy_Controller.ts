@@ -9,13 +9,13 @@ export class GetStudyController {
 
   async handle(req: Request, res: Response, next: NextFunction) {
     try {
-      const { offset, limit } = getStudiesSchema.parse(req.query);
+      const data = getStudiesSchema.parse(req.query);
 
-      const studies = await this.getStudyUseCase.execute({offset, limit});
+      const studies = await this.getStudyUseCase.execute(data);
 
       return res
         .status(200)
-        .json({ message: "Estudo criado com sucesso.", studies });
+        .json({ message: "Estudos retornados com sucesso.", studies });
     } catch (err) {
       if (err instanceof z.ZodError) {
         const zodValidationError = new ZodValidationError(err);
@@ -30,13 +30,13 @@ export class GetStudyByIdController {
 
   async handle(req: Request, res: Response, next: NextFunction) {
     try {
-      const { offset, limit } = getStudiesSchema.parse(req.query);
+      const data = req.params.id;
 
-      const studies = await this.getStudyByIdUseCase.execute({offset, limit});
+      const study = await this.getStudyByIdUseCase.execute(data);
 
       return res
         .status(200)
-        .json({ message: "Estudo criado com sucesso.", studies });
+        .json({ message: "Estudo retornado com sucesso.", study });
     } catch (err) {
       if (err instanceof z.ZodError) {
         const zodValidationError = new ZodValidationError(err);

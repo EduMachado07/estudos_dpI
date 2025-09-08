@@ -13,18 +13,13 @@ export class CreateStudyController {
   async handle(req: Request, res: Response, next: NextFunction) {
     try {
       const data = CreateStudySchema.parse(req.body);
-      const filePath = req.file?.path;
+      const thumbnail = req.file?.buffer;
 
-      if (!filePath) {
+      if (!thumbnail) {
         throw new BadRequest("Thumbnail não informada");
       }
 
-      console.log(filePath);
-
-      const study = await this.createStudyUseCase.execute({
-        ...data,
-        thumbnail: filePath,
-      });
+      const study = await this.createStudyUseCase.execute(data, thumbnail);
 
       return res
         .status(201)

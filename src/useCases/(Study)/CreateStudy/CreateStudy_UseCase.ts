@@ -1,3 +1,4 @@
+import { Study } from "../../../entities/Study";
 import { UploadThumbnail } from "../../../providers/implementations/CloudinaryUploadImageProvider";
 import { NotFound } from "../../../repositories/IErrorRepository";
 import { MockStudyRepository } from "../../../repositories/implementations/MockStudyRepository";
@@ -11,24 +12,24 @@ export class CreateStudyUseCase {
     private uploadThumbnail: UploadThumbnail
   ) {}
 
-  async execute(data: ICreateStudyDTO) {
-    const userAlreadyExists = await this.userRepository.FindUserById(data.authorId);
+  async execute(data: ICreateStudyDTO, thumbnail: Buffer): Promise<Study> {
+    const userAlreadyExists = await this.userRepository.FindUserById(
+      data.authorId
+    );
 
     if (!userAlreadyExists) {
       throw new NotFound("Ops! Usuário não encontrado em nosso sistema");
     }
 
-    // tratar thumbnail
-    const thumbnailUrl = await this.uploadThumbnail.cloudinary(data.thumbnail)
-
-    // tratar body
+    const thumbnailUrl = await this.uploadThumbnail.cloudinary(thumbnail);
     
-
-    const newStudy = await this.studyRepository.create({
+    const study = new Study({
       ...data,
-      thumbnail: thumbnailUrl
-    }) 
+      thumbnail: thumbnailUrl,
+    });
 
-    return newStudy
+    const newStudy = await this.studyRepository.create(study);
+
+    return newStudy;
   }
 }

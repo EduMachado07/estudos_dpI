@@ -1,10 +1,9 @@
 import { Study } from '../entities/Study'
-import { IGetStudiesDTO } from '../useCases/(Study)/GetStudy/GetStudy_DTO';
 
 export interface IStudyRepository {
     create(data: Study): Promise<Study>;
-    findStudies({limit, offset}: IGetStudiesDTO): Promise<Study[]>;
-    findStudyById(id: string): Promise<Study>;
+    findStudies(offset: number, limit: number): Promise<{ studies: Study[]; length: number }>;
+    findStudyById(id: string): Promise<Study | null>;
     // updateStudyById(data: Study): Promise<void>;
-    // deleteStudyById(data: Study): Promise<void>;
+    deleteById(id: string): Promise<void | string>;
 }
