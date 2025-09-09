@@ -1,4 +1,3 @@
-import { Console } from "console";
 import "dotenv/config";
 import { app } from "./app";
 

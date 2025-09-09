@@ -1,14 +1,14 @@
 import { Study } from "../../../entities/Study";
 import { UploadThumbnail } from "../../../providers/implementations/CloudinaryUploadImageProvider";
 import { NotFound } from "../../../repositories/IErrorRepository";
-import { MockStudyRepository } from "../../../repositories/implementations/MockStudyRepository";
-import { MockUserRepository } from "../../../repositories/implementations/MockUserRepository";
+import { IStudyRepository } from "../../../repositories/IStudyRepository";
+import { IUserRepository } from "../../../repositories/IUserRepository";
 import { ICreateStudyDTO } from "./CreateStudy_DTO";
 
 export class CreateStudyUseCase {
   constructor(
-    private studyRepository: MockStudyRepository,
-    private userRepository: MockUserRepository,
+    private studyRepository: IStudyRepository,
+    private userRepository: IUserRepository,
     private uploadThumbnail: UploadThumbnail
   ) {}
 
@@ -25,6 +25,7 @@ export class CreateStudyUseCase {
     
     const study = new Study({
       ...data,
+      author: userAlreadyExists.id,
       thumbnail: thumbnailUrl,
     });
 

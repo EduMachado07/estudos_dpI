@@ -3,8 +3,13 @@ import { registerUserController } from "./useCases/(User)/RegisterUser";
 import { loginUserController } from "./useCases/(User)/LoginUser";
 import { createStudyController } from "./useCases/(Study)/CreateStudy";
 import { upload } from "./providers/UploadImageProvider";
-import { getStudyByIdController, getStudyController } from "./useCases/(Study)/GetStudy";
+import {
+  getStudyByIdController,
+  getStudyController,
+} from "./useCases/(Study)/GetStudy";
 import { deleteStudyController } from "./useCases/(Study)/DeleteStudy";
+import { updateStudyController } from "./useCases/(Study)/UpdateStudy";
+import { authAuthorMiddleware } from "./useCases/(Auth)/AuthAuthor";
 
 const router = express.Router();
 
@@ -14,13 +19,6 @@ router.post("/register", (req: Request, res: Response, next: NextFunction) => {
 router.post("/login", (req: Request, res: Response, next: NextFunction) => {
   return loginUserController.handle(req, res, next);
 });
-router.post(
-  "/study",
-  upload.single("thumbnail"),
-  (req: Request, res: Response, next: NextFunction) => {
-    return createStudyController.handle(req, res, next);
-  }
-);
 // get all studies
 // ?offset&limit
 router.get("/study", (req: Request, res: Response, next: NextFunction) => {
@@ -29,8 +27,26 @@ router.get("/study", (req: Request, res: Response, next: NextFunction) => {
 router.get("/study/:id", (req: Request, res: Response, next: NextFunction) => {
   return getStudyByIdController.handle(req, res, next);
 });
-router.delete("/study/:id", (req: Request, res: Response, next: NextFunction) => {
-  return deleteStudyController.handle(req, res, next);
-});
+
+router.post(
+  "/study",
+  upload.single("thumbnail"),
+  (req: Request, res: Response, next: NextFunction) => {
+    return createStudyController.handle(req, res, next);
+  }
+);
+router.delete(
+  "/study/:id",
+  authAuthorMiddleware.handle,
+  (req: Request, res: Response, next: NextFunction) => {
+    return deleteStudyController.handle(req, res, next);
+  }
+);
+router.patch(
+  "/study/:id",
+  upload.single("thumbnail"),
+  authAuthorMiddleware.handle,
+  updateStudyController.handle
+);
 
 export { router };

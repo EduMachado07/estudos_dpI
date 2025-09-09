@@ -1,5 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
-import { customAlphabet } from 'nanoid'
+import { customAlphabet } from 'nanoid';
+
+const nanoid = customAlphabet('1234567890abcdef', 10);
 
 export class Study {
 
@@ -10,13 +12,12 @@ export class Study {
     public description: string;
     public thumbnail: string | File;
     public body: Object;
-
-    private nanoid = customAlphabet('1234567890abcdef', 10)
+    public author: string;
 
     constructor(props: Omit<Study, 'id' | 'slug'>, id?: string) {
         Object.assign(this, props);
 
         this.id = id ?? uuidv4();
-        this.slug = this.nanoid();
+        this.slug = nanoid();
     }
 }

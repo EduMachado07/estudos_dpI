@@ -1,13 +1,15 @@
 import { NotFound, Unauthorized } from "../../../repositories/IErrorRepository";
 import { MockUserRepository } from "../../../repositories/implementations/MockUserRepository";
 import { TokensRepository } from "../../../repositories/implementations/TokenRepository";
+import { ITokenRepository } from "../../../repositories/ITokenRepository";
+import { IUserRepository } from "../../../repositories/IUserRepository";
 import { ILoginUserDTO } from "./LoginUserDTO";
 import bcrypt from "bcrypt";
 
 export class LoginUserUseCase {
   constructor(
-    private userRepository: MockUserRepository,
-    private tokenRepository: TokensRepository
+    private userRepository: IUserRepository,
+    private tokenRepository: ITokenRepository,
   ) {}
 
   async execute(data: ILoginUserDTO) {
