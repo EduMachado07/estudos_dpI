@@ -1,9 +1,9 @@
 import { v4 as uuidv4 } from "uuid";
 
 export enum Role {
-  ADMIN = "ADMIN",
-  AUTHOR = "AUTHOR",
-  READER = "READER",
+  ADMIN = "admin",
+  AUTHOR = "author",
+  READER = "reader",
 }
 
 export class User {

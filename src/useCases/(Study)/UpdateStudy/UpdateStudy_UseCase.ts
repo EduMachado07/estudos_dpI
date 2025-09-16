@@ -1,36 +1,49 @@
 import { Study } from "../../../entities/Study";
-import { UploadThumbnail } from "../../../providers/implementations/CloudinaryUploadImageProvider";
-import { NotFound } from "../../../repositories/IErrorRepository";
+import { IUploadImage } from "../../../providers/IUploadImage";
+import { NotFound, Unauthorized } from "../../../repositories/IErrorRepository";
 import { IStudyRepository } from "../../../repositories/IStudyRepository";
-import { IUserRepository } from "../../../repositories/IUserRepository";
 import { IUpdateStudyDTO } from "./UpdateStudy_DTO";
 
 export class UpdateStudyUseCase {
   constructor(
     private studyRepository: IStudyRepository,
-    private uploadThumbnail: UploadThumbnail
+    private uploadThumbnail: IUploadImage
   ) {}
 
-  async execute(
-    data: IUpdateStudyDTO,
-    thumbnail?: Buffer
-  ): Promise<Study> {
-    const studyExists = await this.studyRepository.findById(data.study);
+  async execute(data: IUpdateStudyDTO, thumbnail?: Buffer): Promise<Study> {
+    const studyExists = await this.studyRepository.findById(data.studyId);
     if (!studyExists) {
       throw new NotFound("Estudo não encontrado no sistema");
     }
 
-    let thumbnailUrl = studyExists.thumbnail;
-    if (thumbnail) {
-      thumbnailUrl = await this.uploadThumbnail.cloudinary(thumbnail);
+    if (studyExists.author !== data.authorId) {
+      throw new Unauthorized("Você não tem permissão para alterar este estudo");
     }
 
-    const dataStudy: Partial<Study> = {
-      ...data,
-      thumbnail: thumbnailUrl
-    };
+    let thumbnailId = studyExists.thumbnailId;
+    let thumbnailUrl = studyExists.thumbnailUrl;
 
-    const studyUpdated = await this.studyRepository.updateById(data.study, dataStudy);
+    if (thumbnail) {
+      if (thumbnailId) {
+        await this.uploadThumbnail.destroy(thumbnailId);
+      }
+
+      const uploadResult = await this.uploadThumbnail.uploadStream(
+        thumbnail,
+        thumbnailId
+      );
+
+      thumbnailId = uploadResult.id;
+      thumbnailUrl = uploadResult.url;
+    }
+
+    const { authorId, ...rest } = data;
+    const dataStudy: Partial<Study> = { ...rest, thumbnailId, thumbnailUrl };
+
+    const studyUpdated = await this.studyRepository.updateById(
+      data.studyId,
+      dataStudy
+    );
     return studyUpdated;
   }
 }

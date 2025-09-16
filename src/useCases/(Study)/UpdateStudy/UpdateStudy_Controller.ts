@@ -1,16 +1,18 @@
 import z from "zod";
 import { ZodValidationError } from "../../../repositories/IErrorRepository";
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import { UpdateStudySchema } from "./UpdateStudy_DTO";
 import { UpdateStudyUseCase } from "./UpdateStudy_UseCase";
+import { IAuthAuthor } from "../../(Auth)/AuthAuthor/AuthAuthor_DTO";
 
 export class UpdateStudyController {
   constructor(private updateStudyUseCase: UpdateStudyUseCase) {}
 
-  async handle(req: Request, res: Response, next: NextFunction) {
+  async handle(req: IAuthAuthor, res: Response, next: NextFunction) {
     try {
       const data = UpdateStudySchema.parse({
-        study: req.params.id,
+        studyId: req.params.id,
+        authorId: req.authorId,
         ...req.body,
       });
       const thumbnail = req.file?.buffer;

@@ -10,7 +10,8 @@ export class Study {
 
     public title: string;
     public description: string;
-    public thumbnail: string | File;
+    public thumbnailId: string;
+    public thumbnailUrl: string;
     public body: Object;
     public author: string;
 

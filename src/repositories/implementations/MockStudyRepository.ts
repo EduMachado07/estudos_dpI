@@ -2,45 +2,7 @@ import { Study } from "../../entities/Study";
 import { IStudyRepository } from "../IStudyRepository";
 import { BadRequest } from "../IErrorRepository";
 
-export let MockStudies: Study[] = [
-  new Study(
-    {
-      title: "Estudo 1",
-      description: "Descricao do estudo 1",
-      thumbnail: "thumbnail1.jpg",
-      body: {},
-      author: "authorId1"
-    },
-  ),
-  new Study({
-    title: "Estudo 2",
-    description: "Descricao do estudo 2",
-    thumbnail: "thumbnail2.jpg",
-    body: {},
-    author: "authorId1"
-  }),
-  new Study({
-    title: "Estudo 3",
-    description: "Descricao do estudo 3",
-    thumbnail: "thumbnail3.jpg",
-    body: {},
-    author: "authorId1"
-  }),
-  new Study({
-    title: "Estudo 4",
-    description: "Descricao do estudo 4",
-    thumbnail: "thumbnail4.jpg",
-    body: {},
-    author: "authorId2"
-  }),
-  new Study({
-    title: "Estudo 5",
-    description: "Descricao do estudo 5",
-    thumbnail: "thumbnail5.jpg",
-    body: {},
-    author: "authorId2"
-  }),
-];
+export let MockStudies: Study[] = [];
 
 export class MockStudyRepository implements IStudyRepository {
   async create(data: Study): Promise<Study> {
@@ -73,7 +35,7 @@ export class MockStudyRepository implements IStudyRepository {
       throw new BadRequest("Estudo nao encontrado.");
     }
 
-    const { id: _, slug:__, ...rest } = data;
+    const { id: _, slug: __, ...rest } = data;
     const updatedStudy = {
       ...MockStudies[studyIndex],
       ...rest,

@@ -12,7 +12,7 @@ export class DeleteStudyController {
     try {
       const data = deleteStudySchema.parse({
         id: req.params.id,
-        author: req.authorId,
+        authorId: req.authorId,
       });
 
       await this.deleteStudyUseCase.execute(data);

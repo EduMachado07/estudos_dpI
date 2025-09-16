@@ -13,7 +13,7 @@ export class RegisterUserController {
 
       const newUser = await this.registerUserUseCase.execute(data);
 
-      return res.status(201).json({ message: "usuário criado: ", newUser });
+      return res.status(201).json({ message: "Usuário criado.", newUser });
     } catch (err) {
       if (err instanceof z.ZodError) {
         const zodValidationError = new ZodValidationError(err);

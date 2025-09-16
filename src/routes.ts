@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import { registerUserController } from "./useCases/(User)/RegisterUser";
 import { loginUserController } from "./useCases/(User)/LoginUser";
 import { createStudyController } from "./useCases/(Study)/CreateStudy";
-import { upload } from "./providers/UploadImageProvider";
+import { upload } from "./providers/MulterConfig";
 import {
   getStudyByIdController,
   getStudyController,
@@ -31,6 +31,7 @@ router.get("/study/:id", (req: Request, res: Response, next: NextFunction) => {
 router.post(
   "/study",
   upload.single("thumbnail"),
+  authAuthorMiddleware.handle,
   (req: Request, res: Response, next: NextFunction) => {
     return createStudyController.handle(req, res, next);
   }
@@ -46,7 +47,9 @@ router.patch(
   "/study/:id",
   upload.single("thumbnail"),
   authAuthorMiddleware.handle,
-  updateStudyController.handle
+  (req: Request, res: Response, next: NextFunction) => {
+    return updateStudyController.handle(req, res, next);
+  }
 );
 
 export { router };
