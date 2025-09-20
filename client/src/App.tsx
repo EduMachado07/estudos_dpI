@@ -1,4 +1,8 @@
 import { NavLink } from "react-router";
+import { Input } from "@/components/ui/input";
+import { Button } from "./components/ui/button";
+import { Moon, Search, Sun } from "lucide-react";
+import { useState } from "react";
 
 export interface IStudies {
   id?: string;
@@ -38,25 +42,68 @@ const studies: IStudies[] = [
 ];
 
 function App() {
+  const [widthSearch, setWidthSearch] = useState<boolean>(false);
+  const [themeSystem, setThemeSystem] = useState<boolean>(false);
+
   return (
     <>
-      <main className=" px-20">
-        <header className="flex justify-between items-center py-6">
-          <h1 className="font-bold text-2xl">Estudos DPI</h1>
-          <nav>
-            <ul className="flex gap-4">
-              <NavLink to=''>item</NavLink>
-              <NavLink to=''>item</NavLink>
-              <NavLink to=''>item</NavLink>
-            </ul>
-          </nav>
+      <main className="bg-[#f4f4f4] min-h-screen px-[8vw] w-full flex flex-col gap-6">
+        <header className="flex items-end justify-between pt-6">
+          <section className="flex gap-10 items-end">
+            <h1 className="font-bold text-2xl">Estudos DPI</h1>
+            <nav>
+              <ul className="flex gap-4">
+                <NavLink to="">Estudos</NavLink>
+                <NavLink to="">Sobre</NavLink>
+              </ul>
+            </nav>
+          </section>
+          <section className="flex gap-7 items-center">
+            {themeSystem ? (
+              <Moon
+                onClick={() => setThemeSystem(!themeSystem)}
+                className="text-zinc-200"
+              />
+            ) : (
+              <Sun
+                onClick={() => setThemeSystem(!themeSystem)}
+                className="text-zinc-700"
+              />
+            )}
+
+            <div className="relative">
+              <label
+                htmlFor="search"
+                className="absolute left-3 top-1/2 -translate-y-1/2 cursor-pointer"
+              >
+                <Search className="text-zinc-400" size={20} />
+              </label>
+              <Input
+                id="search"
+                type="text"
+                placeholder="Buscar estudo"
+                className={`pl-9 transition-all duration-300 ${
+                  widthSearch ? "w-100" : "w-40"
+                }`}
+                onFocus={() => setWidthSearch(true)}
+                onBlur={() => setWidthSearch(false)}
+              />
+            </div>
+
+            <Button>Criar Estudo</Button>
+          </section>
         </header>
+        <hr />
 
         <div className="grid grid-cols-3 gap-10">
           {studies.map((study, index) => (
             <section key={index} className="border rounded-md">
               <section>
-                <img src={study.thumbnailUrl} alt="sorry, internal problems" className="overflow-hidden" />
+                <img
+                  src={study.thumbnailUrl}
+                  alt="sorry, internal problems"
+                  className="overflow-hidden"
+                />
               </section>
               <div className="p-2 flex flex-col gap-1">
                 <h1 className="capitalize font-bold">{study.title}</h1>
